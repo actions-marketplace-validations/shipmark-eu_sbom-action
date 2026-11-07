@@ -1,0 +1,35 @@
+name: "Shipmark SBOM for mobile apps"
+description: "CycloneDX SBOM for Flutter, React Native, iOS and Android apps from their lockfiles, with an OSV vulnerability check."
+author: "Shipmark"
+branding:
+  icon: "check-square"
+  color: "blue"
+inputs:
+  path:
+    description: "Folder to search for lockfiles (searched recursively, skipping node_modules, Pods and build folders)."
+    default: "."
+  output:
+    description: "Where to write the CycloneDX JSON SBOM."
+    default: "sbom.cdx.json"
+  app-name:
+    description: "Name of the app in the SBOM metadata. Defaults to the repository name."
+    default: ""
+  check-vulnerabilities:
+    description: "Check every component against OSV.dev. Only package names and versions are sent."
+    default: "true"
+  include-dev:
+    description: "Include development-only dependencies (dev dependencies, test and debug configurations)."
+    default: "false"
+  fail-on:
+    description: "Fail the step when a known vulnerability is found: none, any, low, medium, high or critical."
+    default: "none"
+outputs:
+  sbom-path:
+    description: "Absolute path of the generated SBOM."
+  components:
+    description: "Number of components in the SBOM."
+  vulnerabilities:
+    description: "Number of known vulnerabilities found."
+runs:
+  using: "node20"
+  main: "src/index.js"

@@ -1,0 +1,23 @@
+name: Test
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node --test test/run.test.js
+      - name: Run the action on the test fixtures
+        id: sbom
+        uses: ./
+        with:
+          path: test/fixtures
+          output: out/sbom.cdx.json
+      - name: Check the result
+        run: |
+          test "${{ steps.sbom.outputs.components }}" = "9"
+          node -e "const b=require('./out/sbom.cdx.json'); if(b.specVersion!=='1.6') process.exit(1); console.log(b.components.length,'components,',(b.vulnerabilities||[]).length,'vulnerabilities')"
