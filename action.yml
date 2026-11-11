@@ -20,6 +20,9 @@ inputs:
   include-dev:
     description: "Include development-only dependencies (dev dependencies, test and debug configurations)."
     default: "false"
+  sbom-contact:
+    description: "Optional contact of the SBOM creator (email address or https:// web address), written to metadata.manufacturer."
+    default: ""
   fail-on:
     description: "Fail the step when a known vulnerability is found: none, any, low, medium, high or critical."
     default: "none"

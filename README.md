@@ -81,6 +81,17 @@ jobs:
 | `check-vulnerabilities` | `true` | Check components against OSV.dev. Only package names and versions are sent. |
 | `include-dev` | `false` | Include dev dependencies and test/debug-only configurations. |
 | `fail-on` | `none` | `none`, `any`, `low`, `medium`, `high` or `critical`. |
+| `sbom-contact` | empty | Optional email address or `https://` web address of the SBOM creator, written to `metadata.manufacturer`. |
+
+## What the SBOM contains
+
+- One component per package and version, with its [purl](https://github.com/package-url/purl-spec). Development-only packages are left out unless `include-dev` is `true` (then they are marked `scope: excluded`).
+- A **dependency graph**: the app's direct dependencies, and for `package-lock.json`, `yarn.lock` (classic and Berry) and `Podfile.lock` what each component depends on.
+- **Completeness**, stated honestly in `compositions`: the app as a whole is `incomplete` (lockfiles never cover vendored or native code), each component with a graph is `complete` or `incomplete`, and components from lockfiles without a graph (`pubspec.lock`, `Package.resolved`, `gradle.lockfile`) are `unknown`.
+- From npm and Yarn lockfiles: the **download URL** with the **SHA-512** hash of the package, and from `package-lock.json` the **licence the package declares** (`acknowledgement: declared`).
+- Known vulnerabilities from OSV.dev, unless `check-vulnerabilities` is `false`.
+
+You can check the result against the CRA minimum and the BSI TR-03183-2 fields with the free [SBOM checker](https://shipmark.eu/tools/sbom-checker/); it runs in the browser.
 
 ## Outputs
 
